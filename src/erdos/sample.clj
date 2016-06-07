@@ -12,7 +12,8 @@
         vs  (for [v vkps] (/ v sum))
         intervals (reductions + 0 vs)
         tree      (apply sorted-map (interleave intervals (keys kps)))]
-    (repeatedly #(val (first (.seqFrom tree (rand) false))))))
+    (repeatedly #(val (first (.seqFrom ^clojure.lang.Sorted tree
+                                       (rand) false))))))
 
 (defn sample-tree [kps]
   (avl/sample-tree kps))
@@ -20,14 +21,21 @@
 
 (comment
 
-  (-> (let [tree (sample-tree {:a 42 :b 10 :c 48 :d 100})
-          s (repeatedly #(deref tree))
-            s (take 10000 s)] s)
-      (frequencies)
-      (time))
+  (def distrib {:a 42 :b 10 :c 48 :d 100
+                :e 100 :f 34 :G 34 :H 34
+                :i 34 :j 4 :k 3 :l 3 :m 32 :n 23
+                :o 2 :p 3 :q 3 :r 3})
 
-  (-> (let [s (sample-seq {:a 42 :b 10 :c 48 :d 100})
-            s (take 10000 s)] s)
+  (def n 10000)
+
+  (->> (let [tree (sample-tree distrib)]
+         (repeatedly #(deref tree)))
+       (take n)
+       (frequencies)
+       (time))
+
+  (->> (sample-seq distrib)
+      (take n)
       (frequencies)
       (time))
 

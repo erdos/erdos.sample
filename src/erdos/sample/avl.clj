@@ -105,7 +105,8 @@
                                    (-> node .right meta (:count 0))
                                    1)}))
         insert (fn [node x] (insert-with-fn node x << fun))
-        sample (fn [node rand] ;; find by sum
+        sample (fn [^AVLSimpleNode
+                   node ^double rand] ;; find by sum
                  ;(assert (some? node))
                  (let [left (-> node .left meta (:sum 0))
                        mid (-> node .val second)

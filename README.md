@@ -7,22 +7,22 @@ A Clojure library for random sampling in a discrete distribution.
 1. Clone the repo: `git clone https://github.com/erdos/erdos.sample`
 2. Run REPL an require namespaces: `lein repl`, `(require [erdos.sample :as s])`
 
-## Namespaces
+This package contains the following namespaces:
 
 ### erdos.sample
 
 Default sampling data structures.
 
-*(sample-seq m)*
+**(sample-seq m)**
 
 Given a map of `[sample probability]` pairs, returns a lazy seq
 of random samples.
 
-Example:
+*Example:*
 
 `(sample-seq {:a 1 :b 3}) => (:a :b :b :a :b :b :b :a :b :a :b :b :b :b :a ...)`
 
-*(sample-tree m)*
+**(sample-tree m)**
 
 Given a map of `[sample probability]` pairs, returns a new sampling tree instance. This supports the following function calls:
 
