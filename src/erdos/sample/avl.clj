@@ -1,20 +1,21 @@
 (ns erdos.sample.avl
   "AVL-tree implementation with custom meta information stored")
 
-(deftype AVLSimpleNode [^AVLSimpleNode left ^AVLSimpleNode right
-                        val ^int height m]
-  Object
-  (toString [_] (str "(" (str val) ". "
-                     (if left (str left)
-                         "_")
-                     " "
-                     (if right (str right) "_")  " ... " m ")"))
+
+
+;;; (defn- print-avl [node] (str "(" (str val) ". " (if left (str left) "_") " " (if right (str right) "_")  " ... " m ")"))
+
+(deftype AVLSimpleNode [^AVLSimpleNode left, ^AVLSimpleNode right ;; left/right children
+                        val          ;; value stored in node
+                        ^int height  ;; height of node (0 for leaves)
+                        m]           ;; meta map of node
+  ;;; Object (toString [this] (print-avl this))
   clojure.lang.IObj
   (withMeta [_ m]
     (new AVLSimpleNode left right val height m))
   (meta [_] m))
 
-(defmacro ->AVLSimpleNode [left right val]
+(defmacro ^:private ->AVLSimpleNode [left right val]
   `(let [left# ^AVLSimpleNode ~left
          right# ^AVLSimleNode ~right
          val# ~val]
@@ -33,7 +34,6 @@
           (-?> (~y x#) ~@ xs)))
      x)))
 
-;(-?> 1 inc dec inc (fn [_] nil) inc)
 
 (defn- balance-right [^AVLSimpleNode node fun]
   ;(assert (.right node))
@@ -135,3 +135,5 @@
      (reduce insert nil xs))))
 ;; (str (probability-tree {:a 1 :b 1 :c 1}))
 ;; (deref (probability-tree {:a 1 :b 1 :c 1}))
+
+:good
