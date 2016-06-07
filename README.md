@@ -3,7 +3,10 @@
 
 # erdos.sample
 
-A Clojure library for random sampling in a discrete distribution.
+A Clojure library for random sampling for a given a discrete distribution. The distribution can be a result of measurements (how many times an event happened?) or a merely mathematical model.
+
+The background idea is simple: intervals are created based on the probabilities. Then a tree data structure is used to check which interval contains a given random number. The key for the found interval is returned.
+
 
 ## Usage
 
@@ -45,7 +48,7 @@ General purpose AVL-tree implementation.
 
 ## License
 
-Copyright © 2016 FIXME
+Copyright © 2016 Janos Erdos
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
