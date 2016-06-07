@@ -1,3 +1,6 @@
+<p align="center"><img src="https://raw.githubusercontent.com/erdos/erdos.sample/master/doc/logo.png" alt="erdos.stats logo"/></p>
+
+
 # erdos.sample
 
 A Clojure library for random sampling in a discrete distribution.
