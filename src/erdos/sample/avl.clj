@@ -1,11 +1,9 @@
 (ns erdos.sample.avl
   "AVL-tree implementation with custom meta information stored")
 
-
-
 ;;; (defn- print-avl [node] (str "(" (str val) ". " (if left (str left) "_") " " (if right (str right) "_")  " ... " m ")"))
 
-(deftype AVLSimpleNode [^AVLSimpleNode left, ^AVLSimpleNode right ;; left/right children
+(deftype AVLSimpleNode [left, right ;; left/right children
                         val          ;; value stored in node
                         ^int height  ;; height of node (0 for leaves)
                         m]           ;; meta map of node
@@ -78,10 +76,10 @@
      (balance-with-fn fun))))
 
 
-(defn insert [node x]
+(defn insert [^AVLSimpleNode node, x]
   (insert-with-fn node x < identity))
 
-(defn insert-fn-sum [node x]
+(defn insert-fn-sum [^AVLSimpleNode node, x]
   (insert-with-fn node x <
       (fn [node]
         (with-meta node
@@ -90,21 +88,23 @@
                    (-> node .right meta (:sum 0))
                    (or (.val node) 0))}))))
 
-(defn avl-seq [node]
+(defn avl-seq [^AVLSimpleNode node]
   (when node
     (cons (.val node) (concat (avl-seq (.left node)) (avl-seq (.right node))))))
+
+(defn node-add-sum-count [^AVLSimpleNode node]
+  (with-meta node
+    {:sum (+ (-> node .left meta (:sum 0))
+             (-> node .right meta (:sum 0))
+             (or (second (.val node)) 0))
+     :count (+ (-> node .left meta (:count 0))
+               (-> node .right meta (:count 0))
+               1)}))
 
 (defn sample-tree [xs]
   ;; xs: pairs of value-probability
   (let [<<  (fn [a b] (pos? (compare (first a) (first b))))
-        fun (fn [node] (with-meta node
-                        {:sum (+ (-> node .left meta (:sum 0))
-                                 (-> node .right meta (:sum 0))
-                                 (or (second (.val node)) 0))
-                         :count (+ (-> node .left meta (:count 0))
-                                   (-> node .right meta (:count 0))
-                                   1)}))
-        insert (fn [node x] (insert-with-fn node x << fun))
+        insert (fn [node x] (insert-with-fn node x << node-add-sum-count))
         sample (fn [^AVLSimpleNode
                    node ^double rand] ;; find by sum
                  ;(assert (some? node))

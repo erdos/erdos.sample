@@ -5,7 +5,7 @@
 
 A Clojure library for random sampling for a given a discrete distribution. The distribution can be a result of measurements (how many times an event happened?) or a merely mathematical model.
 
-The background idea is simple: intervals are created based on the probabilities. Then a tree data structure is used to check which interval contains a given random number. The key for the found interval is returned.
+The background idea is simple: intervals are created based on the event probabilities. Then a tree data structure is used to check which interval contains a given random number. The key for the found interval is returned.
 
 
 ## Usage
@@ -21,7 +21,7 @@ Default sampling data structures.
 
 **(sample-seq m)**
 
-Given a map of `[sample probability]` pairs, returns a lazy seq
+Given a map of `[sample frequency]` pairs, returns a lazy seq
 of random samples.
 
 *Example:*
@@ -30,21 +30,21 @@ of random samples.
 
 **(sample-tree m)**
 
-Given a map of `[sample probability]` pairs, returns a new sampling tree instance. This supports the following function calls:
+Given a map of `[sample frequency]` pairs, returns a new sampling tree instance. This supports the following function calls:
 
- - `(count tree)` Returns the number of items in this distribution in _O(1)_ time.
- - `@tree` Returns a random sample with the given discrete distribution in _O(log(n))_ time.
- - `(conj tree [item prob]), (assoc tree item prob)` Adds a new item-probability pair to the distribution in _O(log(n))_ time.
- - `(disj tree [item prob])` Removes an item-probability pair from the distribution in _O(log(n))_ time.
- - `(seq tree)` Returns a seq of all sample-probability pairs.
+| function |   description  | time complexity |
+|----------|----------------|-----------------|
+| `(count tree`) | Returns the number of items in this distribution | _O(1)_ |
+| `@tree`        | Returns a random sample | _O(log(n))_ |
+| `(conj tree [item prob]), (assoc tree item prob)` | Adds a new item-frequency pair to the distribution | _O(log(n))_ |
+| `(disj tree [item prob])` | Removes an item-probability pair. | _O(log(n))_ |
+| `(seq tree)`              | Returns a seq of all sample-probability pairs. | _O(1)_ |
 
 It is slightly slower that `sample-seq` but returns a persistent data structure compatible with common clojure functions.
-
 
 ### erdos.sample.avl
 
 General purpose AVL-tree implementation.
-
 
 ## License
 
