@@ -29,8 +29,8 @@
   `(let [left# ^AVLSimpleNode ~left
          right# ^AVLSimleNode ~right
          val# ~val
-         height# (inc (max (if left#  (.height left#)  0)
-                           (if right# (.height right#) 0)))]
+         height# (inc (max (if left#  (.height ^AVLSimpleNode left#)  0)
+                           (if right# (.height ^AVLSimpleNode right#) 0)))]
      (AVLSimpleNode. left# right# val# height# nil)))
 
 
@@ -54,24 +54,24 @@
   ;; (assert (.right node))
   (fun (->AVLSimpleNode
         (fun (->AVLSimpleNode
-              (-> node .left) (-> node .right .left) (-> node .val)))
-        (-> node .right .right)
-        (-> node .right .val))))
+              (-> node .left) (->  node ^AVLSimpleNode (.right) .left) (-> node .val)))
+        (-> node ^AVLSimpleNode (.right) .right)
+        (-> node ^AVLSimpleNode (.right) .val))))
 
 
 (defn- balance-left [^AVLSimpleNode node fun]
   ;; ((A B) C) -> (A (B C)) when a is too heavy
   ;; (assert (.left node))
   (fun (->AVLSimpleNode
-        (-> node .left .left)
+        (-> node ^AVLSimpleNode (.left) (.left))
         (fun (->AVLSimpleNode
-              (-> node .left .right) (-> node .right) (-> node .val)))
-        (-> node .left .val))))
+              (-> node ^AVLSimpleNode (.left) .right) (-> node .right) (-> node .val)))
+        (-> node ^AVLSimpleNode (.left) (.val)))))
 
 
 (defn- node-height-diff [^AVLSimpleNode node]
-  (- (if (.left node) (.height (.left node)) 0)
-     (if (.right node) (.height (.right node)) 0)))
+  (- (if (.left node) (.height ^AVLSimpleNode (.left node)) 0)
+     (if (.right node) (.height ^AVLSimpleNode (.right node)) 0)))
 
 
 (defn- balance-with-fn

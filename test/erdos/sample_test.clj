@@ -12,7 +12,7 @@
                  :i 34 :j 4 :k 3 :l 3 :m 32 :n 23
                  :o 2 :p 3 :q 3 :r 3})
 
-   (def n 10000)
+   (def n 100000)
 
    (def tree (sample-tree distrib))
 
