@@ -32,13 +32,13 @@ of random samples.
 
 Given a map of `[sample frequency]` pairs, returns a new sampling tree instance. This supports the following function calls:
 
-| function |   description  | time complexity |
-|----------|----------------|-----------------|
-| `(count tree`) | Returns the number of items in this distribution | _O(1)_ |
-| `@tree`        | Returns a random sample | _O(log(n))_ |
-| `(conj tree [item prob])` <br/> `(assoc tree item prob)` | Adds a new item-frequency pair to the distribution | _O(log(n))_ |
-| `(disj tree [item prob])` | Removes an item-probability pair. | _O(log(n))_ |
+| function call |   description  | time complexity |
+|---------------|----------------|-----------------|
+| `(count tree`) | Returns the number of distinct items in this distribution | _O(1)_ |
 | `(seq tree)`              | Returns a seq of all sample-probability pairs. | _O(1)_ |
+| `(conj tree [item freq])` <br/> `(assoc tree item freq)`   | Adds a new item-frequency pair to the distribution | _O(log(n))_ |
+| `(disj tree [item freq])` <br/> `(dissoc tree item)` | Removes an item-probability pair. | _O(log(n))_ |
+| `@tree` <br/> `(deref tree)` | Returns a random sample | _O(log(n))_ |
 
 In runtime complexity _n_ is the number of distinct items in the distribution. 
 It is slightly slower that `sample-seq` but returns a persistent data structure compatible with common clojure functions.
