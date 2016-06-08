@@ -1,5 +1,5 @@
-(ns erdos.sample
-  (:require [erdos.sample.avl :as avl]))
+(ns ^{:author "Janos Erdos"} erdos.sample
+    (:require [erdos.sample.avl :as avl]))
 
 
 (defn sample-seq

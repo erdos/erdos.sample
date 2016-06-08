@@ -1,5 +1,5 @@
-(ns erdos.sample.avl
-  "AVL-tree implementation with custom meta information stored")
+(ns ^{:author "Janos Erdos"} erdos.sample.avl
+    "AVL-tree implementation with custom meta information stored")
 
 
 (deftype AVLSimpleNode [left, right ;; left/right children
@@ -64,11 +64,15 @@
         (-> node .left .val))))
 
 
+(defn- node-height-diff [^AVLSimpleNode node]
+  (- (if (.left node) (.height (.left node)) 0)
+     (if (.right node) (.height (.right node)) 0)))
+
+
 (defn- balance-with-fn
   "Automatically balances tree then calls fun on changed nodes."
   [^AVLSimpleNode node fun]
-  (let [diff (- (if (.left node) (.height (.left node)) 0)
-                (if (.right node) (.height (.right node)) 0))]
+  (let [diff (node-height-diff node)]
     (cond (= diff -2)
           (balance-right node fun)
           (= diff +2)
@@ -76,16 +80,34 @@
           :else
           (fun node))))
 
-
 (defn insert-with-fn [^AVLSimpleNode node x < fun]
   (if (nil? node)
     (fun (->AVLSimpleNode nil nil x))
     (->
-     (if (< x (.val node))
-       (let [ll (insert-with-fn (.left node) x < fun)]
-         (->AVLSimpleNode ll (.right node) (.val node)))
-       (let [rr (insert-with-fn (.right node) x < fun)]
-         (->AVLSimpleNode (.left node) rr (.val node))))
+     (cond
+      (< x (.val node))
+      (let [ll (insert-with-fn (.left node) x < fun)]
+        (->AVLSimpleNode ll (.right node) (.val node)))
+      (< (.val node) x)
+      (let [rr (insert-with-fn (.right node) x < fun)]
+        (->AVLSimpleNode (.left node) rr (.val node)))
+      :x=val
+      (->AVLSimpleNode (.left node) (.right node) x))
+     (balance-with-fn fun))))
+
+;;; XXX: impl this.
+'''(defn remove-with-fn [^AVLSimpleNode node x < fun]
+  (when (some? node)
+    (->
+     (cond
+      (< x (.val node))
+      (let [ll (remove-with-fn (.left node) x < fun)]
+        (->AVLSimpleNode ll (.right node) (.val node)))
+      (< (.val node) x)
+      (let [rr (remove-with-fn (.right node) x < fun)]
+        (->AVLSimpleNode (.left node) rr (.val node)))
+      :x=val
+      )
      (balance-with-fn fun))))
 
 (defn avl-find [^AVLSimpleNode node < x not-found]
