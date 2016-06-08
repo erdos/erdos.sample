@@ -16,6 +16,8 @@
 
    (def tree (sample-tree distrib))
 
+   (-> tree (assoc :a 11) (get :a))
+
    (get tree :a)
 
    (->> (let [tree (sample-tree distrib)]

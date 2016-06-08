@@ -33,6 +33,7 @@
                            (if right# (.height right#) 0)))]
      (AVLSimpleNode. left# right# val# height# nil)))
 
+
 ;; This macro is not available in old versions of Clojure.
 (defmacro ^:private -?>
   ([x] x)
@@ -42,6 +43,10 @@
         (if (some? x#)
           (-?> (~y x#) ~@ xs)))
      x)))
+
+
+(defmacro ^:private map-entry [k v]
+  `(new clojure.lang.MapEntry ~k ~v))
 
 
 (defn- balance-right [^AVLSimpleNode node fun]
@@ -80,6 +85,7 @@
           :else
           (fun node))))
 
+
 (defn insert-with-fn [^AVLSimpleNode node x < fun]
   (if (nil? node)
     (fun (->AVLSimpleNode nil nil x))
@@ -95,8 +101,9 @@
       (->AVLSimpleNode (.left node) (.right node) x))
      (balance-with-fn fun))))
 
+
 ;;; XXX: impl this.
-'''(defn remove-with-fn [^AVLSimpleNode node x < fun]
+(defn remove-with-fn [^AVLSimpleNode node x < fun]
   (when (some? node)
     (->
      (cond
@@ -107,8 +114,12 @@
       (let [rr (remove-with-fn (.right node) x < fun)]
         (->AVLSimpleNode (.left node) rr (.val node)))
       :x=val
+      ;; TODO: recusrively rebalance whole branch.
+      (throw (IllegalStateException.
+              "Not implemented yet!"))
       )
      (balance-with-fn fun))))
+
 
 (defn avl-find [^AVLSimpleNode node < x not-found]
   (if node
@@ -118,7 +129,8 @@
      :otherwise        (.val node))
     not-found))
 
-(defn insert [^AVLSimpleNode node, x]
+
+(defn avl-insert [^AVLSimpleNode node, < x]
   (insert-with-fn node x < identity))
 
 
@@ -170,7 +182,10 @@
          clojure.lang.ILookup
          (valAt [_ k] (second (avl-find tree << [k] nil)))
          (valAt [_ k not-found] (second (avl-find tree << [k] [nil not-found])))
-         ))
+         clojure.lang.Associative
+         (containsKey [_ k] (some? (avl-find tree << [k])))
+         (entryAt [_ k] (avl-find tree << [k]))
+         (assoc [_ k v] (f (insert tree (map-entry k v))))))
      (reduce insert nil xs))))
 ;; (str (probability-tree {:a 1 :b 1 :c 1}))
 ;; (deref (probability-tree {:a 1 :b 1 :c 1}))
