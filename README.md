@@ -36,7 +36,7 @@ Given a map of `[sample frequency]` pairs, returns a new sampling tree instance.
 |---------------|----------------|-----------------|
 | `(count tree`) | Returns the number of distinct items in this distribution | _O(1)_ |
 | `(seq tree)`              | Returns a seq of all sample-probability pairs. | _O(1)_ |
-| `(get tree item)` <br/> `(get tree item not-found)`  | Returns the frequency associated with this item. | _O(1)_ |
+| `(get tree item)` <br/> `(get tree item not-found)`  | Returns the frequency associated with this item. | _O(log(n))_ |
 | `(conj tree [item freq])` <br/> `(assoc tree item freq)`   | Adds a new item-frequency pair to the distribution | _O(log(n))_ |
 | `(disj tree [item freq])` <br/> `(dissoc tree item)` | Removes an item-probability pair. | _O(log(n))_ |
 | `@tree` <br/> `(deref tree)` | Returns a random sample | _O(log(n))_ |

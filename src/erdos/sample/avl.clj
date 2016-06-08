@@ -146,8 +146,8 @@
          (equiv [x other] (= x other))
          (seq [_] (avl-seq tree))
          clojure.lang.ILookup
-         (valAt [_ k] (second (avl-find tree << k nil)))
-         (valAt [_ k not-found] (second (avl-find tree << k [nil not-found])))
+         (valAt [_ k] (second (avl-find tree << [k] nil)))
+         (valAt [_ k not-found] (second (avl-find tree << [k] [nil not-found])))
          ))
      (reduce insert nil xs))))
 ;; (str (probability-tree {:a 1 :b 1 :c 1}))

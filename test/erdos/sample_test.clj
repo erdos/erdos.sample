@@ -14,6 +14,10 @@
 
    (def n 10000)
 
+   (def tree (sample-tree distrib))
+
+   (get tree :a)
+
    (->> (let [tree (sample-tree distrib)]
           (repeatedly #(deref tree)))
         (take n)
