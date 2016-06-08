@@ -15,7 +15,7 @@ The background idea is simple: intervals are created based on the event probabil
 
 This package contains the following namespaces:
 
-### erdos.sample
+### erdos.sample namespace
 
 Default sampling data structures.
 
@@ -43,7 +43,7 @@ Given a map of `[sample frequency]` pairs, returns a new sampling tree instance.
 In runtime complexity _n_ is the number of distinct items in the distribution. 
 It is slightly slower that `sample-seq` but returns a persistent data structure compatible with common clojure functions.
 
-### erdos.sample.avl
+### erdos.sample.avl namespace
 
 General purpose AVL-tree implementation.
 
